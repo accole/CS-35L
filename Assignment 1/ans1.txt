@@ -1,0 +1,172 @@
+Adam Cole
+
+ans1.txt
+
+Lab Questions - Assignment 1
+
+1.  Using the hint, I first commanded:
+	$ man man
+    and inspected the options.  From here, I find the command:
+	$ man -k string
+    returns all the commands that have the word string in the description in
+    their man pages.
+
+2.  I find the programs using the which command:
+	$ which mv sh
+    and it outputs the location of the programs in the directory:
+	/usr/local/cs/bin/mv
+    for the program mv, and for the program sh:
+	/usr/local/cs/bin/sh
+
+3.  To search for programs, I use the find command and search within /bin,
+    which is the folder for executable programs:
+	$ find /usr/bin -name "?r"
+    which outputs three results:
+	/usr/bin/tr
+	/usr/bin/ar
+	/usr/bin/pr
+    therefore there are 3.
+
+4.  In order to find the files associated with emacs, I navigate into the folder
+	$ cd /usr/bin
+    and then search for all files with including the name emacs
+	$ ls -l | grep emacs
+    which displays the symbolic link to /etc/alternatives/emacs.
+
+5.  After prepending the path variable to the beginning of my path
+	$ export PATH=/usr/local/cs/bin:$PATH
+    I check the two versions of gcc
+	$ gcc --version
+    which tells me gcc is running version 8.2.0, compared to
+	$ /usr/bin/gcc --version
+    which gives version 4.8.5.  I then investigate the gcc command:
+	$ which gcc
+    which tells me gcc really points to /usr/local/cs/bin/gcc, which isn't /usr/bin/gcc.
+    They are different programs because /usr/bin/gcc is an older archived version, but
+    /usr/local/cs/bin/gcc is a new version installed on my Seasnet.
+
+6.  Since '+' denotes a permission being allowed and a '-' restricted,
+    the chmod u+sx,o-w does two things:
+    	1) changes user's permissions to allowing execution and giving the user
+	   the same level of access as the owner.
+	2) Restricts write permissions for others'.
+
+7.  In order to find the correct find option
+	$ man find
+    where I learn that I want to use the option -mtime n for n*24 hours ago and
+    that we want to specify the search as type directory:
+	$ find /usr/local/cs -type d -mtime 28
+    for 28*24 hours ago, which equates to 4 weeks ago.  The command returned nothing
+    so no directories have been modified in the last 4 weeks.
+
+8.  In order to find the files associated with emacs, I navigate into the folder
+	$ cd /usr/bin
+    and then search for all files that are symbolic links by using grep to find all
+    the files that begin with l, which signifies a file type link. I command this
+    with a wc to tally the number of matches.
+	$ ls -l | grep ^l | wc
+    which outputs 280 and :
+	lrwxrwxrwx    1 root root          52 Jan  2 15:41 allcm -> /usr/share/texlive/texmf-dist/scripts/tetex/allcm.sh
+	lrwxrwxrwx    1 root root           5 Jan  2 15:41 allec -> allcm
+	lrwxrwxrwx    1 root root          56 Jan  2 15:41 allneeded -> /usr/share/texlive/texmf-dist/scripts/tetex/allneeded.sh
+	lrwxrwxrwx    1 root root          30 Jan  2 15:55 appletviewer -> /etc/alternatives/appletviewer
+	lrwxrwxrwx    1 root root           6 Jan  2 15:51 apropos -> whatis
+	lrwxrwxrwx    1 root root           5 Jan  2 15:45 arecord -> aplay
+	lrwxrwxrwx    1 root root           2 Jan  2 15:50 atq -> at
+	lrwxrwxrwx    1 root root           2 Jan  2 15:50 atrm -> at
+	lrwxrwxrwx    1 root root           4 Sep 15  2017 awk -> gawk
+	lrwxrwxrwx    1 root root          10 Jan  2 15:39 bashbug -> bashbug-64
+	...
+
+9.  First I navigate to the correct directory
+	$ cd /usr/lib64
+    and then I search all the files in order sorted by time
+	$ ls -lt
+    and scroll to the bottom of the list.  The last file is:
+	librom1394.so.0.3.0
+
+10. I begin by inspecting the locale command
+	$ man locale
+    which describes that locale retrieves its data from the environment variables describing
+    the current locale settings.
+	
+11. First I open emacs by using the command:
+	$ emacs
+    and then I use the get-help function and select a for PATTERN,
+    then search the commands by keyword downcase:
+	C-h a downcase
+    which returns 2 commands:
+	downcase-region	C-x C-l
+	downcase-word	M-l
+
+12. Similarily, I open emacs by using the command:
+	$ emacs
+    and then I use the get-help function and select c for CODING,
+    then search the commands by keystroke starting at C-M-r down to C-M-v:
+	C-h c C-M-r
+		(C-M-r	runs the command isearch-backward-regexp)
+	C-h c C-M-s
+		(C-M-s	runs the command isearch-forward-regrexp)
+	C-h c C-M-t
+		(C-M-t	runs the command transpose-sexps)
+	C-h c C-M-u
+		(C-M-u	runs the command backward-up-list)
+	C-h c C-M-v
+		(C-M-v	runs the command scroll-other-window)
+
+13.  I open emacs:
+	$ emacs
+     then use the get-help function and select c for CODING, then
+     search the command C-g:
+	C-h c C-g
+		(C-g	runs the command keyboard-quit)
+     In order to explore the command in more detail, I use the get-help
+     function again, but this time select f for FUNCTION:
+	C-h f keyboard-quit Enter
+		(Keyboard-quit is an interactive compiled Lisp function.
+		 It is bound to C-g.
+		 Signal a 'quit' condition.
+		 During execution of Lisp code, this character causes a
+		 quit directly.  At top-level, as an editor command, this
+		 simply beeps.)
+
+14.  I open emacs:
+	$ emacs
+     then use the get-help function and select f for FUNCTION:
+	C-h f yank Enter
+		(yank is bound to C-y)
+		(reinserts the most recent kill, which is the stretch of killed
+		 text most recently killed OR yanked.)
+
+15.  To compare the two, I run the first shell command:
+	$ ls -l
+		total 96
+		-rw-r--r-- 1 adamc ceugrad  4485 Jan 12 19:41 ans1.txt
+		-rwxr-xr-x 1 adamc ceugrad  8440 Jan 12 17:37 a.out
+		-rw-r--r-- 1 adamc ceugrad 16111 Sep 25 11:13 assign1.html
+		-rw-r--r-- 1 adamc ceugrad 16111 Jan 12 15:05 exer1.html
+		-rw-r--r-- 1 adamc ceugrad 16111 Jan 12 17:26 exer2.html
+		-rw-r--r-- 1 adamc ceugrad  1048 Jan 12 17:25 exer3.diff
+		-rw-r--r-- 1 adamc ceugrad 16075 Jan 12 17:19 exer3.html
+		drwxr-xr-x 2 adamc ceugrad  4096 Jan 12 17:31 junk
+		-rw-r--r-- 1 adamc ceugrad  2153 Jan 12 19:08 key1.txt
+     To see the second one, I open emacs
+	$ emacs
+     and run the directory listing of the dired command
+	C-x d ~/35L/A1 Enter
+		/u/ce/ugrad/adamc/35L/A1:
+  		total used in directory 104 available 368820672
+  		drwxr-xr-x 3 adamc ceugrad  4096 Jan 12 17:37 .
+  		drwxr-xr-x 3 adamc ceugrad  4096 Jan 12 15:11 ..
+  		-rw-r--r-- 1 adamc ceugrad  4485 Jan 12 19:41 ans1.txt
+  		-rwxr-xr-x 1 adamc ceugrad  8440 Jan 12 17:37 a.out
+  		-rw-r--r-- 1 adamc ceugrad 16111 Sep 25 11:13 assign1.html
+  		-rw-r--r-- 1 adamc ceugrad 16111 Jan 12 15:05 exer1.html
+  		-rw-r--r-- 1 adamc ceugrad 16111 Jan 12 17:26 exer2.html
+  		-rw-r--r-- 1 adamc ceugrad  1048 Jan 12 17:25 exer3.diff
+  		-rw-r--r-- 1 adamc ceugrad 16075 Jan 12 17:19 exer3.html
+  		drwxr-xr-x 2 adamc ceugrad  4096 Jan 12 17:31 junk
+  		-rw-r--r-- 1 adamc ceugrad  2153 Jan 12 19:08 key1.txt
+	The difference between the two is that the emacs directory listing
+	also lists the directories that the files are within ( . and .. )
+	(their roots) and the times they were edited, etc.
