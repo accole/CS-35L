@@ -86,15 +86,18 @@ In addition to inserting and deleting text, there are other common tasks that yo
   5.  Delete the last part of the file, which contains the diff output.
   6.  … except we didn't really want to do that, so undo the deletion.
   7.  Turn the diff output into a comment, by surrounding it with "<!--" and "-->".
-  8.  Now let's try some search and replaces. Search the text document for the pattern "<ol>". How many instances did you find? Use the search and replace function to replace them all with the final-caps equivalent "<oL>".
-  9.  Check your work with viewing exer4.html with an HTML browser, and by running the shell command "diff -u exer1.html exer4.html >exer4.diff". The only differences should be changes from "<ol>" to "<oL>", and a long HTML comment at the end.
+  8.  Now let's try some search and replaces. Search the text document for the pattern "<ol>". How many instances did you find? Use the search and replace function to replace them all 
+      with the final-caps equivalent "<oL>".
+  9.  Check your work with viewing exer4.html with an HTML browser, and by running the shell command "diff -u exer1.html exer4.html >exer4.diff". The only differences should be changes 
+      from "<ol>" to "<oL>", and a long HTML comment at the end.
 
 Exercise 1.5: Doing commands in Emacs
 
 Do these tasks all within Emacs. Don't use a shell subcommand if you can avoid it.
 
   1.  Create a new directory named "junk" that's right under your home directory.
-  2.  In that directory, create a C source file hello.c that contains the following text. Take care to get the text exactly right, with no trailing spaces or empty lines, with the initial # in the leftmost column of the first line, and with all other lines indented to match exactly as shown:
+  2.  In that directory, create a C source file hello.c that contains the following text. Take care to get the text exactly right, with no trailing spaces or empty lines, with the 
+      initial # in the leftmost column of the first line, and with all other lines indented to match exactly as shown:
   3.  #include <stdio.h>
       int
       main (void)
@@ -111,9 +114,11 @@ Do these tasks all within Emacs. Don't use a shell subcommand if you can avoid i
 Exercise 1.6: Running Elisp code
 
   1.  Visit Emacs's *scratch* buffer.
-  2.  In the buffer, seed the random number generator with your student ID as a string, dashes included. For example, if your student ID is 123-456-789, evaluate (random "123-456-789"). Use C-j (eval-print-last-sexp) to evaluate the expression, and record the result that you get.
+  2.  In the buffer, seed the random number generator with your student ID as a string, dashes included. For example, if your student ID is 123-456-789, evaluate (random "123-456-789"). 
+      Use C-j (eval-print-last-sexp) to evaluate the expression, and record the result that you get.
   3.  In the buffer, assign two random integers to the global variables x and y. Start by executing (setq x (random)). Again, use C-j.
-  4.  What is the product of the two variables? You can find this out by evaluating (* x y). What do you observe about the result? If the answer is the correct mathematical answer, keep trying again with a different pair of random integers until you get an answer that is not mathematically correct.
+  4.  What is the product of the two variables? You can find this out by evaluating (* x y). What do you observe about the result? If the answer is the correct mathematical answer, keep 
+      trying again with a different pair of random integers until you get an answer that is not mathematically correct.
   5.  Try evaluating (* x y) again, but this time with M-: (eval-expression). What difference do you observe in the output?
   6.  Are the two random integers truly random in the mathematical sense? If not, what's not random about them?
   7.  Assuming (random) is truly random, what is the probability that the two-variable product mentioned above is mathematically incorrect? Explain how you calculated this.
