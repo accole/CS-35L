@@ -55,23 +55,25 @@ Exercise 1.1: Moving around in Emacs
   10. When you are done, exit Emacs.
   
 Exercise 1.2: Deleting text in Emacs
-Use Emacs to edit the file exer2.html. The idea is to delete its HTML comments; the resulting page should display the same text as the original.
-Delete the 18th line, which is an HTML comment. <!-- HTML comments look like this. -->
-Delete the HTML comment containing the text "DELETE-ME DELETE-ME DELETE-ME".
-Delete the HTML comment containing the text "https://en.wikipedia.org/wiki/HTML_comment#Comments".
-There are three more HTML comments; delete them too.
-Once again, try to accomplish the tasks using a small number of keystrokes. When you are done, save the file and exit back to the command line. You can check your work by using a browser to view exer2.html. Also, check that you haven't deleted something that you want to keep, by using the following command:
-
-diff -u exer1.html exer2.html >exer2.diff
-The output file exer2.diff should describe only text that you wanted to remove. Don't remove exer2.diff; you'll need it later.
+  1.  Use Emacs to edit the file exer2.html. The idea is to delete its HTML comments; the resulting page should display the same text as the original.
+  2.  Delete the 18th line, which is an HTML comment. <!-- HTML comments look like this. -->
+  3.  Delete the HTML comment containing the text "DELETE-ME DELETE-ME DELETE-ME".
+  4.  Delete the HTML comment containing the text "https://en.wikipedia.org/wiki/HTML_comment#Comments".
+  5.  There are three more HTML comments; delete them too.
+  6.  Once again, try to accomplish the tasks using a small number of keystrokes. When you are done, save the file and exit back to the command line. 
+      You can check your work by using a browser to view exer2.html. Also, check that you haven't deleted something that you want to keep, by using 
+      the following command:
+        $ diff -u exer1.html exer2.html >exer2.diff
+      The output file exer2.diff should describe only text that you wanted to remove. Don't remove exer2.diff; you'll need it later.
 
 Exercise 1.3: Inserting text in Emacs
-Use Emacs to edit the file exer3.html.
-Change the first two instances of "Assignment 1" to "Assignment 42".
-Change the first instance of "UTF-8" to "US-ASCII".
-Ooops! The file is not ASCII so you need to fix that. Remove every line containing a non-ASCII character. You can find the next non-ASCII character by searching for the regular expression [^[:ascii:]].
-Insert an empty line after the first line containing "</ol>".
-When you finish, save the text file and exit Emacs. As before, use the diff command to check your work.
+  1.  Use Emacs to edit the file exer3.html.
+  2.  Change the first two instances of "Assignment 1" to "Assignment 42".
+  3.  Change the first instance of "UTF-8" to "US-ASCII".
+  4.  Ooops! The file is not ASCII so you need to fix that. Remove every line containing a non-ASCII character. You can find the next non-ASCII 
+      character by searching for the regular expression [^[:ascii:]].
+  5.  Insert an empty line after the first line containing "</ol>".
+  6.  When you finish, save the text file and exit Emacs. As before, use the diff command to check your work.
 
 Exercise 1.4: Other editing tasks in Emacs
 In addition to inserting and deleting text, there are other common tasks that you should know, like copy and paste, search and replace, and undo.
