@@ -82,12 +82,3 @@ Homework Exercises - Assignment 1
 	Also, the numbers can never truly be random because inherently, the computer is running a program which dictates the numbers to choose.
 	The probability of the product being incorrect depends solely on overflow.  The probablity of 2 bit integer overflowing and other base cases led
 	me to find the probability of overflow for an N bit integer is 2^(-N).
-
-
-
-
-
-
-
-
-
