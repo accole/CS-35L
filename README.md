@@ -6,7 +6,7 @@ Adam Cole
 
 --------------------------------------
 
-Assignment 1
+Assignment 1    97/100
 
 Assignment 2
 
