@@ -1,0 +1,6 @@
+#!/bin/bash
+
+for i in "$@"
+do
+    grep -r -L -P "[^\x00-\x7F]" $i
+done
