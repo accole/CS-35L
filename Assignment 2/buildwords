@@ -1,0 +1,17 @@
+#!/bin/bash
+
+#Adam Cole
+#UID: 004912373
+#buildwords
+
+sed '/<!DOCTYPE/, /Adopt<\/td>/d' |
+sed '/<\/table>/, /<\/html>/d' |
+sed '/<\/tr>/, /<\/td>/d' |
+sed 's/<[^>]*>//g' |
+sed "s/\`/\'/g" |
+tr [:upper:] [:lower:] |
+sed 's/[ ,]/\n/g' |
+sed '/^\s*$/d' |
+tr -d [:blank:] |
+sed "/[^pk\'mnwlhaeiou]/d" |
+sort -u
