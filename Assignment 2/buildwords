@@ -1,7 +1,6 @@
 #!/bin/bash
 
 #Adam Cole
-#UID: 004912373
 #buildwords
 
 sed '/<!DOCTYPE/, /Adopt<\/td>/d' |
