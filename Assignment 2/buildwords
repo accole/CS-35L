@@ -1,8 +1,5 @@
 #!/bin/bash
 
-#Adam Cole
-#buildwords
-
 sed '/<!DOCTYPE/, /Adopt<\/td>/d' |
 sed '/<\/table>/, /<\/html>/d' |
 sed '/<\/tr>/, /<\/td>/d' |
