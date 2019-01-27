@@ -1,0 +1,14 @@
+#!/bin/bash
+
+for i in "$@"
+do
+    SP=`grep -r -l -P "[^\x00-\x7F]" $i`
+    for x in $SP
+    do
+        HEADER=$(head -n 1 $x)
+	UTF="-*- coding: utf-8 -*-"
+	if [ "$HEADER" != "$UTF" ]; then
+	    echo $x
+	fi
+    done
+done
