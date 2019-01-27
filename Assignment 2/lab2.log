@@ -1,0 +1,221 @@
+Adam Cole
+UID: 004912373
+Lab 6
+Assignment 2
+
+
+Lab2.log
+
+
+I begin by setting the correct locale and then checking it:
+	$ export LC_ALL='C'
+	$ locale
+
+And after create a file named words by sorting the english dictionary
+stored in /usr/share/dict/words by using the command:
+	$ sort /usr/share/dict/words > words
+
+I then convert the assignment page into a word document by using wget:
+	$ wget https://web.cs.ucla.edu/classes/winter19/cs35L/
+	  assign/assign2.html
+And move the html document into a text file per the spec:
+	$ mv assign2.html assign2.txt
+
+Using this text file, I run the following six commands on it as the standard
+input to understand the subtleties behind each command addition:
+
+I run the first command using assign2.txt as the standard input:
+	$ tr -c 'A-Za-z' '[\n*]' < assign2.txt
+The command outputs each word of the file with one or more newlines separating
+them.  This happens because the -c tag takes the complement of the given set,
+therefore any character that is not a capital or lowercase letter will be
+replaced with a newline.  Depending on how many non-letter characters separate
+words, more than one newline will be used.
+
+I run the second command using assign2.txt as the standard input:
+	$ tr -cs 'A-Za-z' '[\n*]' < assign2.txt
+This command outputs each word in the file with only one newline in between
+each word.  The -s tag represents the "squeeze" option which replaces
+repeated occurances of a character with just a single occurance - therefore,
+every word is only separated by one newline and never more than that.
+
+I run the third command using assign2.txt as the standard input:
+	$ tr -cs 'A-Za-z' '[\n*]' < assign2.txt | sort
+This command outputs the same result as the last command, except the words
+separated by newlines are sorted in alphabetical order due to the sort command.
+
+I run the fourth command using assign2.txt as the standard input:
+	$ tr -cs 'A-Za-z' '[\n*]' < assign2.txt | sort -u
+This command outputs the same result as the last command, except now duplicate
+words are removed, so each line is "unique" (hence the -u tag).
+
+I run the fifth command using assign2.txt as the standard input:
+	$ tr -cs 'A-Za-z' '[\n*]' < assign2.txt | sort -u | comm - words
+This command recieves the sorted list of words in assign2.txt as the previous
+command outputs, and then compares this file (denoted by - ) line-by-line to
+the second argument words.  The output of this command results in three
+columns: the first is a list of the words unique only to assign2.txt, the
+second is a list of the words unique only to words, and the third is a list of
+words similar to both files.  In this case, the longest column is the second,
+because there is a far majority of words in the dictionary that are not used
+in assign2.txt.
+
+I run the last command using assign2.txt as the standard input:
+	$ tr -cs 'A-Za-z' '[\n*]' < assign2.txt | sort -u | comm -23 - words
+This command compares the output to the file words as before, but then
+suppresses the 2nd and 3rd column (by the -23 tag).  Therefore, the only output
+is the column with the words unique only to assign2.txt (words that don't
+appear in words but do in assign2.txt).  This serves, essentially, as a
+basic english spellchecker.
+
+Now, let's create a Hawaiian equivalent.
+
+I begin creating my Hawaiian dictionary by using wget on the given url:
+	$ wget http://mauimapp.com/moolelo/hwnwdseng.htm
+and write a script called buildwords to systematically delete everything but
+the Hawaiian words in the same form that the english dictionary words is.
+
+To begin the script, I delete the header and footer of hwnwdseng.htm that is
+just html tags:
+	sed '/<!DOCTYPE/, /Adopt<\/tf>/d' |
+The d tag indicates the sed editor to delete the range between <!DOCTYPE> and
+Adopt, the first english word in the English to Hawaiian dictionary.  The |
+character indicates that the output of this sed command will be piped into
+the standard input of the next script command.
+
+Similarly, to delete the end of the file:
+	sed '/<\/table/, /<\/html>/d' |
+This sed command will delete everything from the range </table/ to </html>,
+the footer with html tags of the htm file.
+
+Next, I want to delete all of the english words and their corresponding
+tags in the english to hawaiian dictionary.  I inspect the hwnwdseng.htm
+file and notice a pattern between the english and hawaiian words:
+	  </tr>
+	  <tr>
+	    <td>Adopt</td>
+	    <td>H<u>a</u>nai</td>
+	  </tr>
+	  <tr>
+	    <td>Affection</td>
+	    <td>Pumehana</td>
+	  ...
+Using this, I use the following command to delete the english words and their
+corresponding tags:
+	sed '/<\/tr>/,/<\/td>/d' |
+since this command will delete the text in between </tr> and the next </td>
+tag, so only the english words will be removed.
+
+Next I need to delete the rest of the remaining html tags surrounding each
+Hawaiian word:
+	sed 's/<[^>]*>//g' |
+This removes the tags because this command tells the editor to delete every
+instance of < (any characters that are not '>') >, which define each html tag.
+
+Next I replace every okina ` with an ASCII apostrophe ' using the command:
+	sed "s/\`/\'/g" |
+since the s tag directs the editor to replace the first argument with the
+second.
+
+Next I convert all uppercase letters to lowercase:
+	tr [:upper:] [:lower:] |
+man tr tells us that the tr command translates characters, and the [: :]
+notation represents a set notation.  Therefore, all the upper case Hawaiian
+letters in hwnwdseng.htm are translated to lower case.
+
+I then replace any spaces or commas in the resulting file using:
+	sed 's/[ ,]/\n/g'  |
+as mentioned before, the s tag indicates replacement and the g tag indicates
+replacement at every instance of the case.
+
+Next, to delete all of the blank lines left in the file:
+	sed '/^\s*$/d'   |
+since $ signifies embedded character at the end of each line, and * means 0-x
+characters preceeding the end of the file, and the leading ^ not character
+means the complement of the following set.  Therefore, this command deletes
+any line that has no characters.
+
+And then delete all blank spaces left in the file:
+	tr -d [:blank:]  |
+the d tag uses tr as a way to delete characters.
+
+Finally, I delete all characters that aren't in the Hawaiian alphabet
+specified in the spec:
+	sed "/[^pk\'mnwlhaeiou]/d" |
+
+And lastly sort the final result in a alphabetical order:
+	sort -u
+the -u tag also deletes any duplicate words in the dictionary.  Therefore,
+the file will now match the format of the english dictionary file words.
+
+In order to make my script executable, I change the permissions of the file
+to make it executable:
+	$ chmod u+x buildwords
+
+Now to create my list of Hawaiian words, I run my script on hwnwdseng.htm:
+	$ cat hwnwdseng.htm | ./buildwords > hwords
+resulting in a sorted list of Hawaiian words to run through my linux spell
+checker from above.
+
+I check my Hawaiian spell checker on assign2.txt, the text file representation
+of the assignment page.  Since the hwords dictionary is in lower case, I must
+first make sure all capitals in assign2.txt are changed to lowercases:
+	$ ­tr '[:upper:]' '[:lower:]' < assign2.txt | 
+	tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -23 - hwords | wc
+Which returns 213, meaning there were that many misspelled words on assign2
+in comparison to the hawaiian dictionary.  Some examples are:
+	ollowin
+	pelle
+	uppe
+	awaiian
+	... (etc.)
+I then store the list of these words in a text file.
+	$ ­tr '[:upper:]' '[:lower:]' < assign2.txt | 
+	tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -23 - hwords > haw.txt
+
+I repeat the same process to assign2.txt against my english dictionary words:
+	$ tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u |
+	  comm -23 - words | wc
+Which returns 87, meaning there were that many misspelled words on assign2
+in comparison to the english dictionary.  Some examples are:
+	eggert
+	grep
+	UTF
+	wiki
+	... (etc.)
+I then store the list of these words in a text file.
+	$ tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u |
+	  comm -23 - words > eng.txt
+
+In order to check if there are any words that are "misspelled" as English, but
+not as Hawaiian or the other way around, we must compare the two lists of
+misspelled words eng.txt and haw.txt back to the opposite dictionaries.
+
+By supressing the first and second columns, the ouput is only the words
+in both the english list of misspelled words and the hawaiian dictionary
+hwords:
+	$ tr '[:upper:]' '[:lower:]' < eng.txt | 
+	  tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -12 - hwords | wc
+Which returns 7, meaning these are the words that are misspelled as English
+but not as hawaiian.  Running the command again without the wc tag is:
+	au
+	e
+	halau
+	i
+	la
+	lau
+	wiki
+
+Again supressing the first two columns, the ouput is only the words similar
+to the hawaiian list of misspelled words that also occur in the enlish
+dictionary words:
+	$ tr -cs 'A-Za-z' '[\n*]' < haw.txt | sort -u | comm -12 - words | wc
+Which returns 115, meaning these are the words that are misspelled as
+Hawaiian but not as English.  Running the command again without the wc tag
+gives us examples:
+	men
+	will
+	well
+	plea
+	plain
+	... (etc.)
