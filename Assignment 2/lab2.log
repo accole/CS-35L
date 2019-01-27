@@ -1,7 +1,4 @@
 Adam Cole
-UID: 004912373
-Lab 6
-Assignment 2
 
 
 Lab2.log
@@ -16,8 +13,7 @@ stored in /usr/share/dict/words by using the command:
 	$ sort /usr/share/dict/words > words
 
 I then convert the assignment page into a word document by using wget:
-	$ wget https://web.cs.ucla.edu/classes/winter19/cs35L/
-	  assign/assign2.html
+	$ wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/assign2.html
 And move the html document into a text file per the spec:
 	$ mv assign2.html assign2.txt
 
@@ -160,8 +156,7 @@ checker from above.
 I check my Hawaiian spell checker on assign2.txt, the text file representation
 of the assignment page.  Since the hwords dictionary is in lower case, I must
 first make sure all capitals in assign2.txt are changed to lowercases:
-	$ ­tr '[:upper:]' '[:lower:]' < assign2.txt | 
-	tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -23 - hwords | wc
+	$ tr '[:upper:]' '[:lower:]' < assign2.txt | tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -23 - hwords | wc
 Which returns 213, meaning there were that many misspelled words on assign2
 in comparison to the hawaiian dictionary.  Some examples are:
 	ollowin
@@ -170,12 +165,10 @@ in comparison to the hawaiian dictionary.  Some examples are:
 	awaiian
 	... (etc.)
 I then store the list of these words in a text file.
-	$ ­tr '[:upper:]' '[:lower:]' < assign2.txt | 
-	tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -23 - hwords > haw.txt
+	$ tr '[:upper:]' '[:lower:]' < assign2.txt | tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -23 - hwords > haw.txt
 
 I repeat the same process to assign2.txt against my english dictionary words:
-	$ tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u |
-	  comm -23 - words | wc
+	$ tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm -23 - words | wc
 Which returns 87, meaning there were that many misspelled words on assign2
 in comparison to the english dictionary.  Some examples are:
 	eggert
@@ -184,8 +177,7 @@ in comparison to the english dictionary.  Some examples are:
 	wiki
 	... (etc.)
 I then store the list of these words in a text file.
-	$ tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u |
-	  comm -23 - words > eng.txt
+	$ tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm -23 - words > eng.txt
 
 In order to check if there are any words that are "misspelled" as English, but
 not as Hawaiian or the other way around, we must compare the two lists of
@@ -194,8 +186,7 @@ misspelled words eng.txt and haw.txt back to the opposite dictionaries.
 By supressing the first and second columns, the ouput is only the words
 in both the english list of misspelled words and the hawaiian dictionary
 hwords:
-	$ tr '[:upper:]' '[:lower:]' < eng.txt | 
-	  tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -12 - hwords | wc
+	$ tr '[:upper:]' '[:lower:]' < eng.txt | tr -cs "pk\'mnwlhaeiou" '[\n*]' | sort -u | comm -12 - hwords | wc
 Which returns 7, meaning these are the words that are misspelled as English
 but not as hawaiian.  Running the command again without the wc tag is:
 	au
