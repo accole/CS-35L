@@ -6,22 +6,22 @@ Adam Cole
 
 --------------------------------------
 
-Assignment 1    97/100
+Assignment 1  - Emacs & Linux -  97/100
 
-Assignment 2
+Assignment 2  - Shell Scripting -  
 
-Assignment 3
+Assignment 3  - Installing / Modifying Packages & Python - 
 
-Assignment 4
+Assignment 4  - C Programming & Debugging - 
 
-Assignment 5
+Assignment 5  - System Call Programming & Debugging -  
 
-Assignment 6
+Assignment 6  - Multithreaded Performance -  
 
-Assignment 7
+Assignment 7  - Dynamic Linking -  
 
-Assignment 8
+Assignment 8  - SSH Application - 
 
-Assignment 9
+Assignment 9  - Change Management -  
 
-Assignment 10
+Assignment 10  - R&D in Computer Science -  
