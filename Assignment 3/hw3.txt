@@ -1,0 +1,49 @@
+Adam Cole
+UID: 004912373
+Lab 6
+
+
+hw3.txt
+
+
+
+1.
+
+The ls command now aligns with the other Linux tag standards, where any
+subsequent tag should overwrite any previous tags if they overlap 
+functionality.  In this case, ls becomes standardized.  Discussing time
+efficiency, the ls -aA command removed an 
+	if (ignore_mode == IGNORE_DEFAULT)
+            ignore_mode = IGNORE_DOT_AND_DOTDOT;
+any replaces it with only
+	ignore_mode = IGNORE_DOT_AND_DOTDOT;
+So, the time efficiency should improve since the if() comparison is avoided
+and will always set the condition instead of testing first.
+
+
+2.
+
+Since the patch only changes the functionality of ls, if my company adopted
+the patched version of Coreutils, I would watch out for any function / code
+that included the ls command.  Since it was changed, trusting ls to work as
+before could lead to unforseen consequences.
+
+
+3.
+
+When running randline.py on the empty file /dev/null, it returns an index error
+because the randline.py file operates with the total number of lines in the
+file, which is 0 in the /dev/null file.
+
+
+4.
+
+When randline.py is compiled with python3, it returns a syntax error.  The
+error comes from the line:
+	 File "randline.py", line 65
+	    except IOError as (errno, strerror):
+	                      ^
+	SyntaxError: invalid syntax
+This syntax is valid for python2, but when compiled in python3 it is incorrect.
+In python3, it should be written as:
+	except IOError as err:

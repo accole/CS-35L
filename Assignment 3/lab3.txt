@@ -1,0 +1,118 @@
+Adam Cole
+UID:004912373
+Lab 6
+Assignment 3
+
+
+lab3.txt
+
+
+I start off by downloading the tar off the assignment page by using wget, and
+then verifying its signature:
+	$ wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz
+	$ wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz.sig
+	$ wget https://ftp.gnu.org/gnu/gnu-keyring.gpg
+I run the verification:
+	$ gpg --verify --keyring ./gnu-keyring.gpg coreutils-8.29.tar.xz.sig
+Which returned:
+	gpg: Signature made Wed 27 Dec 2017 10:29:05 AM PST using RSA key ID 
+	     306037D9
+	gpg: /u/ce/ugrad/adamc/.gnupg/trustdb.gpg: trustdb created
+	gpg: Good signature from "Pádraig Brady <P@draigBrady.com>"
+	gpg:                 aka "Pádraig Brady <pbrady@redhat.com>"
+	gpg:                 aka "Pádraig Brady <pixelbeat@gnu.org>"
+	gpg: WARNING: This key is not certified with a trusted signature!
+	gpg:          There is no indication that the signature belongs to 
+		      the owner.
+	Primary key fingerprint: 6C37 DC12 121A 5006 BC1D  B804 DF6F D971 
+				 3060 37D9
+The verification fails because the key from the downloaded signature does not
+include a trusted signature.
+
+Once verified, I unzip the tar file to extract its contents.
+	$ tar -xvf coreutils-8.29.tar.xz
+
+And refer to the Installation header in the INSTALL file to install the package
+	$ cd coreutils-8.29
+	$ emacs INSTALL
+And search for the prefix header
+	C-s prefix
+Which tells me how to install the package into a temporary directory as a
+prefix:
+	$ ./configure --prefix=/u/ce/ugrad/adamc/coreutilsAdamc
+	$ make			# compiles the package
+	$ make install		# installs the package
+
+Navigating to the package, I use the ls command to find the broken ls tag:
+	$ cd ~/coreutilsAdamc/bin
+	$ ls -aA -l
+Which returns:
+	drwxr-xr-x 2 adamc ceugrad   8192 Jan 28 21:31 .
+	drwxr-xr-x 5 adamc ceugrad   4096 Jan 28 21:31 ..
+	-rwxr-xr-x 1 adamc ceugrad 186800 Jan 28 21:31 [
+	-rwxr-xr-x 1 adamc ceugrad 286392 Jan 28 21:31 b2sum
+	-rwxr-xr-x 1 adamc ceugrad 179080 Jan 28 21:31 base32
+	-rwxr-xr-x 1 adamc ceugrad 174064 Jan 28 21:31 base64
+	-rwxr-xr-x 1 adamc ceugrad 142224 Jan 28 21:31 basename
+	-rwxr-xr-x 1 adamc ceugrad 164672 Jan 28 21:31 cat
+	... (etc.)
+But we want to patch this to return only:
+	-rwxr-xr-x 1 adamc ceugrad 186800 Jan 28 21:31 [
+	-rwxr-xr-x 1 adamc ceugrad 286392 Jan 28 21:31 b2sum
+	-rwxr-xr-x 1 adamc ceugrad 179080 Jan 28 21:31 base32
+	-rwxr-xr-x 1 adamc ceugrad 174064 Jan 28 21:31 base64
+	-rwxr-xr-x 1 adamc ceugrad 142224 Jan 28 21:31 basename
+	-rwxr-xr-x 1 adamc ceugrad 164672 Jan 28 21:31 cat
+	... (etc.)
+
+I patch the bug by copy pasting the patch from GNU Bug report logs #30963,
+message #10, into a diff file:
+	$ cd ~/35L/A3/coreutils-8.29
+	$ emacs patch.file
+from the website:
+	* NEWS: Mention this.
+	* src/ls.c (decode_switches): Implement this.
+	* tests/ls/a-option.sh: New file.
+	* tests/local.mk (all_tests): Add it.
+	---
+	 NEWS                 |  3 +++
+	 src/ls.c             |  3 +--
+	 tests/local.mk       |  1 +
+	 tests/ls/a-option.sh | 27 +++++++++++++++++++++++++++
+	 4 files changed, 32 insertions(+), 2 deletions(-)
+	 create mode 100755 tests/ls/a-option.sh
+therefore the three files we need to implement decode_switches to ls.c, add 
+tests to local.mk, update NEWS, and add a new file a-option.sh in order to
+complete the patch.
+
+and then path the bug in ls with this diff file.
+	$ patch -p1 < patch.file
+
+This returns:
+	patching file NEWS
+	Hunk #1 FAILED at 4.
+	1 out of 1 hunk FAILED -- saving rejects to file NEWS.rej
+	patching file src/ls.c
+	Hunk #1 succeeded at 1900 (offset -3 lines).
+	...
+While NEWS fails to patch, only the ls.c file is needed to patch the bug.
+ 
+The only revision to the source code successfully happened in src/ls.c.
+Once the bug has been patched, we must recompile and the package
+to finish updating the patch from the top of the source tree so it doesn't
+reinstall in the temporary directory.  First, we reconfigure in case any
+configurations were changed:
+	$ autoreconf -f
+	$ make
+
+Now when we use the ls command, we see the following difference:
+	$ cd src
+	$ ./ls -aA
+returns:
+	'['                 factor               nl.o
+	 b2sum              factor.c             nohup
+	 base32             factor.o             nohup.c
+	 base64             false                nohup.o 
+	... (etc.)
+
+The bug has sucessfully patched.
