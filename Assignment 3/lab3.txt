@@ -1,6 +1,5 @@
 Adam Cole
-UID:004912373
-Lab 6
+
 Assignment 3
 
 
@@ -18,9 +17,9 @@ Which returned:
 	gpg: Signature made Wed 27 Dec 2017 10:29:05 AM PST using RSA key ID 
 	     306037D9
 	gpg: /u/ce/ugrad/adamc/.gnupg/trustdb.gpg: trustdb created
-	gpg: Good signature from "Pádraig Brady <P@draigBrady.com>"
-	gpg:                 aka "Pádraig Brady <pbrady@redhat.com>"
-	gpg:                 aka "Pádraig Brady <pixelbeat@gnu.org>"
+	gpg: Good signature from "PÃ¡draig Brady <P@draigBrady.com>"
+	gpg:                 aka "PÃ¡draig Brady <pbrady@redhat.com>"
+	gpg:                 aka "PÃ¡draig Brady <pixelbeat@gnu.org>"
 	gpg: WARNING: This key is not certified with a trusted signature!
 	gpg:          There is no indication that the signature belongs to 
 		      the owner.
