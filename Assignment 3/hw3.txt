@@ -1,6 +1,4 @@
 Adam Cole
-UID: 004912373
-Lab 6
 
 
 hw3.txt
