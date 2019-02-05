@@ -59,9 +59,12 @@ Output random permuations of input lines from FILE."""
         parser = OptionParser(version=version_msg, usage=usage_msg)
 
         #implement options
-        parser.add_option("-n", "--head-count", action="store", dest="count", default=False, help="ouput at most COUNT lines (default all)")
-        parser.add_option("-i", "--input-range", action="store", dest="ir", default=False, help="treat each number LO through HI as an input line")
-        parser.add_option("-r", "--repeat", action="store_true", dest="repeat", default=False, help="output lines can be repeated")
+        parser.add_option("-n", "--head-count", action="store", dest="count", default=False, 
+                          help="ouput at most COUNT lines (default all)")
+        parser.add_option("-i", "--input-range", action="store", dest="ir", default=False, 
+                          help="treat each number LO through HI as an input line")
+        parser.add_option("-r", "--repeat", action="store_true", dest="repeat", default=False, 
+                          help="output lines can be repeated")
 
         #read the input line and store options
         options, args = parser.parse_args(sys.argv[1:])
