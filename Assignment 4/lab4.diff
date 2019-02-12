@@ -1,4 +1,4 @@
-2019-02-11  Adam Christopher Cole  <adamc@lnxsrv07.seas.ucla.edu>
+2019-02-11  Adam Cole  <####@lnxsrv07.seas.ucla.edu>
 
         * lib/timespec.h (timespec_cmp): Change timespec_cmp to use direct comparison
 	instead of Subtraction to avoid integer overflow cases with files created far apart
