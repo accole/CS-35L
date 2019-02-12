@@ -1,0 +1,194 @@
+Adam Cole
+UID: 004912373
+Lab 6
+
+lab4.txt:
+
+
+I begin by moving coreutils-with-bug.tar.gz to my linux server and unzipping
+the tar:
+	$ tar -xvzf coreutils-with-bug.tar.gz
+
+and navigating to the unzipped folder.  From there I begin to build this buggy
+version as-is:
+	$ ./configure --prefix'/u/cs/ugrad/adamc/35L/A4/coreutilsL4
+
+and build the executables:
+	$ make
+Which returns:
+	In file included from utimecmp.c:41:0:
+	utimens.h:2:5: error: conflicting types for 'futimens'
+	 int futimens (int, char const *, struct timespec const [2]);
+	     ^
+	In file included from utimecmp.h:25:0,
+	                 from utimecmp.c:25:
+	/usr/include/sys/stat.h:373:12: note: previous declaration of 'futimens' was here
+       extern int futimens (int __fd, const struct timespec __times[2]) __THROW;
+            ^
+which shows conflicting function names while building.
+
+I retry the installation with the given patch, I download the coreutils.diff
+patch from the class website and put it into a file patch.file
+	$ patch -p0 < patch.file
+
+We reconfigure in case any configurations were changed:
+	$ autoreconf -f
+and
+	$ make
+
+This time, the $ make works because the patch changed the function names
+coreutils_futimens and coreutils_tee to avoid the compiling conflict.  I finish
+the installation:
+	$ make install
+
+Which successfully installs.
+
+
+
+To recreate the error with ls -t, we create a temporary directory and run the
+code given in the spec:
+	$ tmp=$(mktemp -d)
+	$ cd $tmp
+	$ touch -d '1918-11-11 11:00 GMT' wwi-armistice
+	$ touch now
+	$ sleep 1
+	$ touch now1
+	$ TZ=UTC0 ls -lt --full-time wwi-armistice now now1
+Which returns:
+	-rw-r--r-- 1 adamc ceugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+	-rw-r--r-- 1 adamc ceugrad 0 2019-02-10 22:20:04.190172968 +0000 now1
+	-rw-r--r-- 1 adamc ceugrad 0 2019-02-10 22:19:53.103806221 +0000 now
+Which produces a bug, since -t sorts by modification time, newest first.
+Therefore, wwi-armistice should be the last file, not the first.  
+	$ cd
+	$ rm -fr $tmp
+
+In order to find the bug in ls -t, we navigate to the installed coreutils folder and
+use gdb to investigate the source code.
+	$ gdb ~/coreutilsL4/install/bin/ls
+And then print out a list of functions for every source file, using the gdb command:
+	(gdb) info functions
+to see a list of functions used in ls.  Since our bug deals with sorting files by time,
+I choose sort_files and compare_mtimes to investigate to find the bug.
+
+I set breakpoints at these two functions, so if they are called, gdb will pause the
+process.
+	(gdb) break sort_files
+	(gdb) break compare_mtimes
+
+And then I run the test using -lt --full-time, the same tags used when recreating
+the bug:
+	(gdb) run -lt --full-time
+
+gdb first stops at the breakpoint for sort_files.  We dive into this function, line
+by line using (gdb) step:
+	(gdb) step
+	    ...
+	(gdb) step
+Eventually, gdb outputs the source code:
+	func = sort_reverse ? rev_cmp_mtime : compare_mtime;
+
+Neither -l nor -t sort the ls command in reverse order, so the function 
+compare_mtime() is called next.  Since we already set a breakpoint at that
+function, I let gdb continue.
+	(gdb) continue
+
+When gdb encounters compare_mtime(), I repeat the process as above
+	(gdb) step
+	   ...
+	(gdb) step
+Until another function call is made in compare_mtime().  We set a breakpoint at this
+function, timespec_cmp() and continue again.
+	(gdb) continue
+
+When gdb encounters timespec_cmp(), I display the function:
+	(gdb) list
+Which outputs:
+	/* Return negative, zero, positive if A < B, A == B, A > B, respectively.
+	   Assume the nanosecond components are in range, or close to it.  */
+       	static inline int
+       	timespec_cmp (struct timespec a, struct timespec b)
+       	{
+       	  int diff = a.tv_sec - b.tv_sec;
+       	  return diff ? diff : a.tv_nsec - b.tv_nsec;
+       	}
+
+Here, we identify an issue.  int diff = a.tv_sec - b.tv_sec creates an opportunity
+to overflow if the difference in time in struct a and struct b is too large to
+be stored in the integer diff.  This is the case in our bug, where wwi-armistice
+was so old that it wrapped around and sorted the file above now and now1.
+
+Once we have identified the bug, we fix it.
+	(gdb) quit
+
+
+
+The function timespec_cmp() appears in timespec.h.  Therefore, to fix this bug,
+I copy timespec.h to a file in my current directory to edit the bug out, copy.h.
+
+We change timespec_cmp() to handle integer overflow with direct comparison:
+
+	/* Return negative, zero, positive if A < B, A == B, A > B, respectively.
+	   Assume the nanosecond components are in range, or close to it.  */
+       	static inline int
+       	timespec_cmp (struct timespec a, struct timespec b)
+       	{
+	  if (a.tv_sec == b.tv_sec)
+       	  {  return 0;  }
+	  else if (a.tv_sec > b.tv_sec)
+	  {  return 1;  }
+	  else
+	  {  return -1;  }
+       	}
+
+Which still returns negative, zero, positive if A < B, A == B, A > B, respectively.
+
+Now I create a patch file to fix the bug:
+	$ diff -u coreutils-with-bug/lib/timespec.h copy.h > lab4.diff
+
+We navigate into lab4.diff and add a ChangeLog entry:
+	C-x 4 a
+and ensure the paths correspond by using lib/timespec.h as the path.
+
+I apply the patch to fix the bug:
+	$ patch -p0 < lab4.diff
+
+Then compile and install the new version:
+	$ make
+	$ make install
+
+
+
+We test it again using a temporary directory as we did before:
+	$ tmp=$(mktemp -d)
+	$ cd $tmp
+	$ touch -d '1918-11-11 11:00 GMT' wwi-armistice
+	$ touch now
+	$ sleep 1
+	$ touch now1
+	$ TZ=UTC0 ls -lt --full-time wwi-armistice now now1
+Which returns:
+	-rw-r--r-- 1 adamc ceugrad 0 2019-02-11 01:23:04.729681901 +0000 now1
+	-rw-r--r-- 1 adamc ceugrad 0 2019-02-11 01:22:43.062211083 +0000 now
+	-rw-r--r-- 1 adamc ceugrad 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+Correctly placing wwi-armistice at the end of the list.
+	$ cd
+	$ rm -fr $tmp
+
+
+
+Finally, I test this bug in the home directory, not in a temporary one.
+	$ cd
+	$ touch -d '1918-11-11 11:00 GMT' wwi-armistice
+	$ touch now
+	$ sleep 1
+	$ touch now1
+	$ TZ=UTC0 ls -lt --full-time wwi-armistice now now1
+Which returns:
+	-rw-r--r-- 1 adamc ceugrad 0 2054-12-17 17:28:16.000000000 +0000 wwi-armistice
+	-rw-r--r-- 1 adamc ceugrad 0 2019-02-11 01:27:17.681901478 +0000 now1
+	-rw-r--r-- 1 adamc ceugrad 0 2019-02-11 01:26:20.110832642 +0000 now
+
+In the home directory, wwi-armistrice is in the same incorrect order as the original
+bug, except the time also overflows to the future, not just the order of the files.
+
