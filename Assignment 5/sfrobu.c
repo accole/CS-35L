@@ -1,6 +1,5 @@
 //Adam Cole
-//UID: 004912373
-//Lab 6
+
 
 //sfrobu.c
 
