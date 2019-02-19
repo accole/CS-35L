@@ -2,10 +2,9 @@
 
 
 
-Laboratory: 
+Laboratory: Spell-checking Hawaiian
 
-
-Spell-checking Hawaiian:
+--------------------------------------------------------------------------------------------------------------------------------------
 
 Keep a log in the file lab2.log of what you do in the lab so that you can reproduce the results later. This should not merely be a transcript of what you typed: it 
 should be more like a true lab notebook, in which you briefly note down what you did and what happened.
@@ -58,10 +57,9 @@ as Hawaiian but not as English? If so, give examples.
 
 
 
-Homework: 
+Homework: Find improperly marked files
 
-
-Find improperly marked files:
+--------------------------------------------------------------------------------------------------------------------------------------
 
 You're working in a project that has lots of text files. Some of them are in plain ASCII; others are in UTF-8, which is a superset of ASCII. None of the files are supposed to contain
 NUL bytes (all bits zero). The UTF-8 files that contain non-ASCII characters are supposed to have a first line containing the string "-*- coding: utf-8 -*-" (without the quotation marks).
