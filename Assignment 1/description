@@ -1,9 +1,9 @@
 *All Credit Should be Given to Paul Eggert, UCLA for this assignment*
 
 
-Laboratory: 
+Laboratory: Linux and Emacs scavenger hunt
 
-Linux and Emacs scavenger hunt:
+-------------------------------------------------------------------------------------------------------------------------------------------------
 
 As you do actions, use Emacs to record your keystrokes and each answer in plain-text files key1.txt and ans1.txt that you will submit as part 
 of the assignment. If you prefer, you can record and submit Org files key1.org and ans1.org instead of .txt files; see Hello Worg for Org 
@@ -33,9 +33,9 @@ introductions and tutorials.
     Emacs dired command? List any shell or Emacs commands you used to answer this question.
     
     
-Homework: 
+Homework: Learning to use Emacs
 
-Learning to use Emacs:
+-----------------------------------------------------------------------------------------------------------------------------------------------------
 
 For all the exercises, record the steps taken to accomplish the given tasks. Use intelligent ways of answering the questions. For example, if asked 
 to move to the first occurrence of the word "scrumptious", do not merely use cursor keys to move the cursor by hand; instead, use the builtin search 
