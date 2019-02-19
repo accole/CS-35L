@@ -1,6 +1,4 @@
 Adam Cole
-UID: 004912373
-Assn. 5
 
 report.txt:
 
