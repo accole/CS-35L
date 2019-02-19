@@ -23,5 +23,3 @@ Assignment 7  - Dynamic Linking -
 Assignment 8  - SSH Application - 
 
 Assignment 9  - Change Management -  
-
-Assignment 10  - R&D in Computer Science -  
