@@ -1,8 +1,11 @@
+*All credit should be given to Paul Eggert, UCLA, for this assignment*
+
 Assignment 5. System call programming and debugging
 
 
 Laboratory: Buffered versus unbuffered I/O
 
+----------------------------------------------------------------------------------------------------------------------------
 
 As usual, keep a log in the file lab.txt of what you do in the lab so that you can reproduce the results later. This should 
 not merely be a transcript of what you typed: it should be more like a true lab notebook, in which you briefly note down 
@@ -29,6 +32,7 @@ Use the time command to measure how much faster one program is, compared to the 
 
 Homework: Encrypted sort revisited
 
+-----------------------------------------------------------------------------------------------------------------------------
 
 Rewrite the sfrob program you wrote previously so that it uses system calls rather than <stdio.h> to read standard input and 
 write standard output. If standard input is a regular file, your program should initially allocate enough memory to hold all 
