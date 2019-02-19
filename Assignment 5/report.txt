@@ -1,0 +1,249 @@
+Adam Cole
+UID: 004912373
+Assn. 5
+
+report.txt:
+
+`````````````````````````````````````
+`````````````lab.txt:````````````````
+`````````````````````````````````````
+`````````````````````````````````````
+
+At any point in this lab, to test the functionality of our program we can use
+Linux command tr:
+	$ tr "abc" "def"
+or
+	$ man tr
+for any clarification.
+
+When using tr, the first set "abc" represent the input values that need to
+be translated to corresponding values "def".  To create a functioning program
+that implements this, we use getchar() and putchar().
+
+Some things I must take into account in order to error handle correctly are:
+	1) number of arguments
+	2) if the arguments are the same length of characters
+	3) if any characters in the input range are duplicated
+
+Similarly, for tr2u.c, we implement the same functionality with system calls
+read() and write() instead of getchar() and putchar().  In order to use these
+system calls, we must #include <unistd.h> and understand the syntax of using
+these calls.  Replacing only the getchar() with read() and the correct details
+and putchar() with write() and the correct details, I create a functioning tr2u.
+
+Once finished, I test my .c programs by compiling them and testing them like tr:
+	$ gcc -o tr2b tr2b.c
+	$ ./tr2b "abc" "def"
+and
+	$ gcc -o tr2u tr2u.c
+	$ ./tr2u "abc" "def"
+
+In order to compare the system calls issued in tr2b and tr2u, I use the strace
+command when copying one file to another and when copying a file to my terminal.
+We use a file at least 5,000,000 bytes in size = 5MB.
+	$ strace -c ./tr2b "ab" "xz" < words > out
+
+	% time     seconds  usecs/call     calls    errors syscall
+	------ ----------- ----------- --------- --------- ----------------
+	 45.03    0.000426           1       605           write
+	 34.88    0.000330           1       607           read
+	  7.19    0.000068          68         1           brk
+	  4.76    0.000045          45         1           execve
+	  3.38    0.000032           4         9           mmap
+	  1.59    0.000015           8         2           open
+	  1.06    0.000010          10         1         1 access
+	  0.95    0.000009           2         4           mprotect
+	  0.63    0.000006           2         4           fstat
+	  0.53    0.000005           3         2           close
+	  0.00    0.000000           0         1           munmap
+	  0.00    0.000000           0         1           arch_prctl
+	------ ----------- ----------- --------- --------- ----------------
+	100.00    0.000946                  1238         1 total
+
+
+	$ strace -c ./tr2u "ab" "xz" < words > out
+
+	% time     seconds  usecs/call     calls    errors syscall
+	------ ----------- ----------- --------- --------- ----------------
+	 55.11   24.567167           5   4953680           write
+	 44.89   20.014701           4   4953682           read
+	  0.00    0.000000           0         2           open
+	  0.00    0.000000           0         2           close
+	  0.00    0.000000           0         2           fstat
+	  0.00    0.000000           0         7           mmap
+	  0.00    0.000000           0         4           mprotect
+	  0.00    0.000000           0         1           munmap
+	  0.00    0.000000           0         1           brk
+	  0.00    0.000000           0         1         1 access
+	  0.00    0.000000           0         1           execve
+	  0.00    0.000000           0         1           arch_prctl
+	------ ----------- ----------- --------- --------- ----------------
+	100.00   44.581868               9907384         1 total
+
+There are way more system calls using tr2u over tr2b since tr2u explicitly uses
+system calls in the source code, which amplifies the total amount.  It takes
+a much longer time to complete the process since system calls create context
+switches.
+
+Now, I test this in terminal without copying one file to another.
+	$ strace -c ./tr2b "ab" "xz" < words
+
+	% time     seconds  usecs/call     calls    errors syscall
+	------ ----------- ----------- --------- --------- ----------------
+	 99.85    2.135540           4    479828           write
+	  0.15    0.003174           5       607           read
+	  0.00    0.000000           0         2           open
+	  0.00    0.000000           0         2           close
+	  0.00    0.000000           0         4           fstat
+	  0.00    0.000000           0         9           mmap
+	  0.00    0.000000           0         4           mprotect
+	  0.00    0.000000           0         1           munmap
+	  0.00    0.000000           0         1           brk
+	  0.00    0.000000           0         1         1 access
+	  0.00    0.000000           0         1           execve
+	  0.00    0.000000           0         1           arch_prctl
+	------ ----------- ----------- --------- --------- ----------------
+	100.00    2.138714                480461         1 total
+
+
+	$ strace -c ./tr2u "ab" "xz" < words
+
+	% time     seconds  usecs/call     calls    errors syscall
+	------ ----------- ----------- --------- --------- ----------------
+	 55.90   27.895091           6   4953680           write
+	 44.10   22.002378           4   4953682           read
+	  0.00    0.000045           6         7           mmap
+	  0.00    0.000043          43         1           execve
+	  0.00    0.000026           7         4           mprotect
+	  0.00    0.000017           9         2           open
+	  0.00    0.000015          15         1           brk
+	  0.00    0.000013          13         1         1 access
+	  0.00    0.000010          10         1           munmap
+	  0.00    0.000007           4         2           fstat
+	  0.00    0.000006           3         2           close
+	  0.00    0.000003           3         1           arch_prctl
+	------ ----------- ----------- --------- --------- ----------------
+	100.00   49.897654               9907384         1 total
+
+From this, we deduce the change in number of sys calls comes from where the
+result is output to.  Before, the strace command was written to out, so there
+was only 607 system calls for tr2b.  Now, however, since each of the
+translations must be written to terminal, the number of system calls skyrockets.
+For tr2u, the number of system calls between both cases stays the exact same
+because tr2u will have to use write() and a system call to write it to out or
+to terminal, so a system call is used no matter what.
+
+Now, we use the time command to compare exactly how much faster tr2b is over
+tr2u:
+	$ time ./tr2b "ab" "xz" < words > out
+
+	real    0m0.350s
+	user    0m0.235s
+	sys     0m0.014s
+
+	$ time ./tr2u "ab" "xz" < words > out
+
+	real    0m10.838s
+	user    0m1.348s
+	sys     0m9.389s
+
+	$ time ./tr2b "ab" "xz" < words
+
+	real    0m2.597s
+	user    0m0.412s
+	sys     0m0.697s
+
+	$ time ./tr2u "ab" "xz" < words
+
+	real    0m10.094s
+	user    0m1.409s
+	sys     0m8.331s
+
+Analyzing these results, it is obvious that the buffered tr2b is much faster
+than the unbuffered tr2u implementation. 
+
+
+`````````````````````````````````````
+````````````sfrob.txt:```````````````
+`````````````````````````````````````
+`````````````````````````````````````
+
+I use words, a large text file with 479828 lines and 479828 words from the lab
+section of Assignment 2, spell checking Hawaiian.  I run the different files
+and options using this file:
+	$ time cat words | ./sfrob
+
+	real    0m3.370s
+	user    0m0.447s
+	sys     0m0.755s
+
+	$ time cat words | ./sfrobu
+
+	real    0m9.447s
+	user    0m1.510s
+	sys     0m7.947s
+
+	$ time cat words | ./sfrobs
+
+	real    0m3.932s
+	user    0m0.011s
+	sys     0m0.386s
+
+	$ time cat words | ./sfrobu -f
+
+	real    0m9.823s
+	user    0m1.549s
+	sys     0m8.229s
+
+	$ time cat words | ./sfrobs -f
+
+	real    0m2.180s
+	user    0m0.009s
+	sys     0m0.390s
+
+Fastest to Slowest for big data:
+	1) ./sfrobs -f
+	2) ./sfrob
+	3) ./sfrobs
+	4) ./sfrobu
+	5) ./sfrobu -f
+
+Next, I use adam.txt, a text file with 2 lines and 25 words.  I run the
+different files and options using this file:
+	$ time cat adam.txt | ./sfrob
+
+	real    0m0.005s
+	user    0m0.000s
+	sys     0m0.004s
+
+	$ time cat adam.txt | ./sfrobu
+
+	real    0m0.002s
+	user    0m0.001s
+	sys     0m0.003s
+
+	$ time cat adam.txt | ./sfrobs
+
+	real    0m0.006s
+	user    0m0.003s
+	sys     0m0.006s
+
+	$ time cat adam.txt | ./sfrobu -f
+
+	real    0m0.006s
+	user    0m0.002s
+	sys     0m0.003s
+
+	$ time cat adam.txt | ./sfrobs -f
+
+	real    0m0.006s
+	user    0m0.000s
+	sys     0m0.010s
+
+Fastest to Slowest for small data:
+	1) ./sfrobu
+	2) ./sfrob
+	3) ./sfrobs
+	4) ./sfrobu -f
+	5) ./sfrobs -f
+
