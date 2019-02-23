@@ -10,7 +10,7 @@ Assignment 1  - Emacs & Linux -  97/100
 
 Assignment 2  - Shell Scripting -  
 
-Assignment 3  - Installing / Modifying Packages & Python - 
+Assignment 3  - Installing / Modifying Packages & Python - 95/100
 
 Assignment 4  - C Programming & Debugging - 
 
