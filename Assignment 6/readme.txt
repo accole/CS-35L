@@ -1,5 +1,5 @@
 Adam Cole
-UID: 004912373
+
 Assignment 6
 
 README:
