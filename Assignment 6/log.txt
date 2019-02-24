@@ -1,0 +1,70 @@
+Adam Cole
+UID: 004912373
+Assignment 6
+
+
+log.txt:
+
+
+To begin, I run the sort command given in the spec:
+	$ sort --version
+which tells us we are using sort version 8.22 of GNU coreutils.
+This version is more recent than GNU 8.6, so multithreaded operations
+will work.
+
+I then create a file with 2^(24) random single-precision floats
+by running the object dump command:
+	$ od -An -tfF -N $(4*(2**24)) < /dev/urandom | tr -s [:blank:] '\n' > floats.txt
+
+The -An tag specifies no address radix.  The -tfF tag signifies that the command
+should select only floats.  The -N tag tells Linux to only grab BYTES bytes from
+the input file.  Each float is 4 bytes long, therefore, in order to grab 2^(24)
+floats, we must grab (4*(2**24)) bytes.  I pipe these floats into the tr command,
+and replace any "blanks" with newlines, storing the final result into a text file
+called floats.txt.
+
+This command leaves one newline at the beginning of floats.txt and I delete it
+with emacs.
+
+Next, I sort the random input floats using different levels of
+parallelism, and record their execution times.  We don't need the sorted versions
+of the floats, just the time, so we use the output as /dev/null.
+
+	$ time -p sort -g floats.txt > /dev/null
+
+	real 9.13
+	user 48.88
+	sys 0.20
+
+	$ time -p sort -g --parallel=1 floats.txt > /dev/null
+
+	real 41.76
+	user 41.66
+	sys 0.08
+
+	$ time -p sort -g --parallel=2 floats.txt > /dev/null
+
+	real 22.35
+	user 42.36
+	sys 0.11
+
+	$ time -p sort -g --parallel=4 floats.txt > /dev/null
+
+	real 13.26
+	user 44.40
+	sys 0.16
+
+	$ time -p sort -g --parallel=8 floats.txt > /dev/null
+
+	real 9.19
+	user 49.10
+	sys 0.21
+
+From this, we can deduce several things.  First, the total CPU time it takes to
+sort the floats remains nearly the same among all the different cases (~45seconds).
+When this total time is seperated amongst 1, 2, 4, an 8 cores however, the real time
+shrinks considerably the more threads are used.  Second, the system time increases as
+more threads are used.  Lastly, the sort command must be automatically optimized to
+use multithreading when possible to speed up all sorts, because the real time it
+takes sort to run matches that of the 8 threaded sort.
+
