@@ -1,9 +1,13 @@
+*All credit should be given to Paul Eggert, UCLA, for this assignment*
 
 
 Assignment 7. Dynamic linking
 
+
+
 Laboratory: Who's linked to what?
 
+-------------------------------------------------------------------------------------------------------------------------------
 
 As usual, keep a log in the file lab.txt of what you do in the lab so that you can reproduce the results later. This should not 
 merely be a transcript of what you typed: it should be more like a true lab notebook, in which you briefly note down what you 
@@ -22,8 +26,11 @@ For this laboratory, you will find out about which programs are linked to which 
 6. Get a sorted list of every dynamic library that is used by any of the commands on your list (omitting duplicates from your list).
 
 
+
+
 Homework: Split an application into dynamically linked modules
 
+--------------------------------------------------------------------------------------------------------------------------------
 
 In this homework you will divide a small example application into dynamically linked modules and a main program, so that the 
 resulting executable does not need to load code that it doesn't need. Although this is just a toy example which would probably not 
