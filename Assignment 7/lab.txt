@@ -104,7 +104,7 @@ two libraries libm and libc.
 4.
 
 I run the shell command given in the spec to get a list of commands to investigate.
-	$ ls /usr/bin | awk 'NR%101==004912373%101'	
+	$ ls /usr/bin | awk 'NR%101==#########%101'	
 
 	aconnect
 	batch
