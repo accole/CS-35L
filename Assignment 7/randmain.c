@@ -2,7 +2,7 @@
 //randmain.c
 //assn 7
 
-#include "./randcpuid.h"
+#include "randcpuid.h"
 //not #include <randlib.h>
 #include <errno.h>
 #include <stdio.h>
@@ -60,27 +60,28 @@ main (int argc, char **argv)
   //void (*initialize) (void);
   unsigned long long (*rand64) (void);
   void *fhandler;
+
   if (rdrand_supported ())
     {
-      fhandler = dlopen("./randlibhw.so", RTLD_LAZY);
+      fhandler = dlopen("randlibhw.so", RTLD_LAZY);
       if (!fhandler) {
-	fprintf(stderr, "Error: Bad dlopen");
+	fprintf(stderr, "Error: dlopen failed");
 	exit(1);
       }
       rand64 = dlsym(fhandler, "harware_rand64");
     }
   else
     {
-      fhandler = dlopen("./randlibsw.so", RTLD_LAZY);
+      fhandler = dlopen("randlibsw.so", RTLD_LAZY);
       if (!fhandler) {
-	fprintf(stderr, "Error: Bad dlopen");
+	fprintf(stderr, "Error: dlopen failed");
 	exit(1);
       }
       rand64 = dlsym(fhandler, "software_rand64");
     }
 
   if (!rand64){
-	fprintf(stderr, "Error: Bad rand64");
+	fprintf(stderr, "Error: dlysm failed");
 	exit(1);
   }
 
@@ -112,6 +113,10 @@ main (int argc, char **argv)
       return 1;
     }
 
+  if (dlclose(fhandler) != 0){
+    fprintf(stderr, "Failed to close file");
+    exit(1);
+  }
   //finalize ();
   return 0;
 }

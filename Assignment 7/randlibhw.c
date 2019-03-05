@@ -2,7 +2,7 @@
 //randlibhw.c
 //assn 7
 
-#include "./randlib.h"
+#include "randlib.h"
 #include <immintrin.h>
 
 //implement the interface described by randlib.h

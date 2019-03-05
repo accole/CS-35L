@@ -2,7 +2,7 @@
 //randcpuid.c
 //assn 7
 
-#include "./randcpuid.h"
+#include "randcpuid.h"
 #include <cpuid.h>
 
 

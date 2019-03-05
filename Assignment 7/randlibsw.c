@@ -2,7 +2,7 @@
 //randlibsw.c
 //assn 7
 
-#include "./randlib.h"
+#include "randlib.h"
 #include <stdio.h>
 #include <stdlib.h>
 
