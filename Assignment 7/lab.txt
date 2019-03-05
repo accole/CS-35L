@@ -1,6 +1,7 @@
 Adam Cole
-UID: 004912373
+
 Assignment 7
+
 Lab.txt
 
 
