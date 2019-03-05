@@ -176,7 +176,7 @@ that is used by any of the commands on the list from part 4 above.
 		f=`which $x`
 		ldd $f
 	done |
-	grep -so |
+	grep so |
 	sed '/^\/usr\/bin/d' |
 	sort -u
 
