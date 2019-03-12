@@ -1,6 +1,6 @@
 Adam Cole
-UID: 004912373
-Assn 8
+
+Assignment 8
 
 hw.txt
 
@@ -39,3 +39,4 @@ the verification would not detect them as attackers.
 
 One way around this would be to use a third party authenticator with your public
 key.  This software would authenticate the original owner of the public key.
+
