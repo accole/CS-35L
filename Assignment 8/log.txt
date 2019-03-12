@@ -1,0 +1,135 @@
+Adam Cole
+UID: 004912373
+Assignment 8
+Log.txt
+
+Upon plugging in my BeagleBone into my laptop, I navigate to the file explorer
+and select Start.htm from the BeagleBone folder.
+
+I already have all the drivers downloaded to my BeagleBone from ENGR 96A the
+prior year.
+
+Opening PuTTY, I connect to the host 192.168.7.2.  When the system prompts a
+username and password, I enter 'debian' and 'temppwd'.
+
+I first connect to the wifi:
+	$ sudo connmanctl
+	connmanctl> enable wifi
+	connmanctl> scan wifi
+	connmanctl> services
+	connmanctl> agent on
+	connmanctl> connect wifi_2cf7f1065384_4352333736302d77696669_managed_psk
+	connmanctl> quit
+
+Once connected, I update the apt-get database:
+	$ sudo get-apt update
+
+And then install the required materials for X11 forwarding support.  This will
+allow SSH connections to my BeagleBone.
+	$ sudo apt-get install xauth
+	$ sudo apt-get install xvfb
+
+I ensure I have openssh server and client by running the command:
+	$ dpkg --get-selections | grep openssh
+
+I enable X11 forwarding by navigating to my BeagleBone config files and editing
+them if neccesary.
+	$ cd /etc/ssh/
+	$ emacs sshd_config
+
+In sshd_config I check the configuration X11Forwarding says 'yes'
+
+	$ emacs ssh_config
+
+In ssh_config I uncomment the first host lines ForwardAgent, ForwardX11, but not
+ForwardX11Trusted and change the first two from saying 'no' to 'yes'. 
+
+Futhermore, I add my changes to the following file:
+	$ emacs ~/.ssh/config
+
+The file did not exist, so I create a new one and add 'ForwardAgent yes' and
+'ForwardX11 yes'.
+
+Next, I download XMing for Windows on my machine from google.  Without this
+client, I would not be able to see the X windows on my machine.
+
+I install Firefox and emacs to my BeagleBone.  
+	$ sudo get-apt install firefox-esr-l10n-en-gb
+	$ sudo get-apt install emacs
+
+From here, we have set up our BeagleBones to allow connections, and our next
+step is to connect one BeagleBone to another.
+
+To connect, one BeagleBone acts as a server and the other will act as a client.
+
+
+Server Steps
+------------
+
+First, create a key pair (public and private):
+	$ ssh-keygen
+Which saves to file ~/.ssh/is-rsa and ~/.ssh/is_rsa.pub by default.  I set the
+password to this key as 'pwd'.
+
+Next, create an account for the client:
+	$ sudo useradd -d /home/bbserver -m myusername
+	$ sudo passwd myusername
+I set the password for myusername as 'pwd2'.
+
+Next, create a .ssh directory within the client directory, and change the
+ownership to include the client username:
+	$ cd /home/bbserver
+	$ sudo mkdir .ssh
+	$ sudo chown -R myusername .ssh
+	$ sudo chmod 700 .ssh
+
+Finally, record the server IP address by runnning the following:
+	$ ifconfig
+which gives us 10.97.85.52 as the IP address.
+	
+Client Steps
+------------
+
+First, create a key pair (public and private):
+	$ ssh-keygen
+
+Then, copy the client public key to the server for key-based authentication.
+	$ ssh-copy-id -i myusername@10.97.85.52
+
+Next, create an authentication agent and add the client private key to the
+authentication agent.
+	$ eval `ssh-agent`
+	$ ssh-add
+
+Now we can SSH into the Server:
+	$ ssh myusername@10.97.85.52
+	$ ssh -X myusername@10.97.85.52
+
+After entering the passwords for both the public key ~/.ssh/is-rsa and the
+username myusername, we have connected to the server BeagleBone.  From here,
+we can run processes on the server BeagleBone while displaying the results
+on the client terminal.  To test this, the client runs firefox, the search
+engine downloaded on each BeagleBone earlier in the lab.
+	$ firefox
+
+
+Firefox pops open on the client monitor.  On the server terminal, we test:
+	$ top
+We see firefox running at the top of the list.  Therefore, the client is
+using the server BeagleBone to load its content.
+
+In order to test ssh -Y versus ssh -X, the client re-ssh into the server Beagle
+Bone, this time with tag -Y instead of -X.  This time, we run firefox again.
+	$ firefox
+and nothing appears different.
+
+The difference between the two tags is that ssh -X is untrusted and ssh -Y is
+trusted.  Untrusted connections provide an extra layer of security to the
+connected server client.  In untrusted connections, the client sends a command
+to the server and the server replies with the graphical output; if the client
+sends a command that violates security settings, then the server will reply
+with an error message.
+
+In trusted connections, the remote client is trusted and accepts a wider range
+of commands from the client.  This can raise a security issue, however, because
+the remote client could gather data, record keylogging, and other bad things.

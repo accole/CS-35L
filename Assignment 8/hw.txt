@@ -1,0 +1,41 @@
+Adam Cole
+UID: 004912373
+Assn 8
+
+hw.txt
+
+
+1. 
+
+If the other teams had the ability to examine the bytes transferred over the
+network, the information transported would still be secure.  Since the public
+key encrypts the information before being sent over the network, any attacker
+would only be able to view the encrypted mess.  In order to decrypt these bytes,
+the attacker would need the private key, which is very secure.  Furthermore,
+anyone just looking at the transferred bytes would not be able to access the
+private key.
+
+Additionally, if the other teams had also been able to log any keystrokes made
+by me and my team, the security of our information would be at a bigger risk.
+While logging our keystrokes still does not give the attackers access to our
+private key, but it gives them the power to tamper with our data.  Keystroke
+logging could allow them to see our usernames and passwords, and allow them to
+have access to other important files.
+
+Lastly, if the the other teams had physical control of the USB at one point in
+time, our information would be at a high risk.  With a USB with everything loaded
+onto it, the attackers could access both public and private key pairs and decrypt
+the information being sent over the network.  Therefore, if this were the case,
+our previous encryption efforts would be pointless.
+
+
+2.
+
+gpg2 --verify does not verify that the user actually created the file, it only
+verifies that the target file and detatched signatures match each other.  The
+test will not be able to determine the origin of the keys, so if the other teams
+or attackers got access to the private key and created their own public keys,
+the verification would not detect them as attackers.
+
+One way around this would be to use a third party authenticator with your public
+key.  This software would authenticate the original owner of the public key.
