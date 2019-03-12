@@ -39,6 +39,8 @@ Homework
 
 ----------
 
+GNU Privacy Guard - https://www.gnupg.org/gph/en/manual.html#AEN26
+
 On the SEASnet GNU/Linux servers, use GNU Privacy Guard's shell commands to create a key pair. Although GPG version 2 is recommended,
 you can use version 1 if you prefer. Export the public key, in ASCII format, into a file hw-pubkey.asc. Use this key to create a 
 detached signature for your submission so that the commands described below can successfully verify it.
