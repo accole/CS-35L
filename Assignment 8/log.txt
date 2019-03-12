@@ -1,6 +1,7 @@
 Adam Cole
-UID: 004912373
+
 Assignment 8
+
 Log.txt
 
 Upon plugging in my BeagleBone into my laptop, I navigate to the file explorer
