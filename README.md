@@ -14,7 +14,7 @@ Assignment 3  - Installing / Modifying Packages & Python - 95/100
 
 Assignment 4  - C Programming & Debugging - 
 
-Assignment 5  - System Call Programming & Debugging -  
+Assignment 5  - System Call Programming & Debugging -  92/100
 
 Assignment 6  - Multithreaded Performance -  
 
