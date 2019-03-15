@@ -1,7 +1,7 @@
 From ed55da9eba2893022130e1e0a0ebe278e07bc998 Mon Sep 17 00:00:00 2001
-From: Adam Christopher Cole <adamc@lnxsrv06.seas.ucla.edu>
+From: Adam Cole <adamc@lnxsrv06.seas.ucla.edu>
 Date: Thu, 14 Mar 2019 13:28:15 -0700
-Subject: [PATCH] 2019-03-14  Adam Christopher Cole 
+Subject: [PATCH] 2019-03-14  Adam Cole 
  <adamc@lnxsrv06.seas.ucla.edu>
 
 	* maint: quote 'like this' or "like this", not `like this'
