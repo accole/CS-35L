@@ -1,3 +1,5 @@
+*All credit should be given to Paul Eggert, UCLA, for this assignment*
+
 Assignment 9. Change management
 
 You’re helping to develop an operating system and command set that as part of its acceptance test is supposed to be used by a large government agency. The agency has lots of requirements, some sensible and some persnickety, and one of these requirements is that applications must use characters properly from the Unicode character set. In particular, applications must use the Unicode character “`” (grave accent, U+0060) only as a spacing accent character.
