@@ -1,17 +1,37 @@
 *All credit should be given to Paul Eggert, UCLA, for this assignment*
 
+
 Assignment 9. Change management
 
-You’re helping to develop an operating system and command set that as part of its acceptance test is supposed to be used by a large government agency. The agency has lots of requirements, some sensible and some persnickety, and one of these requirements is that applications must use characters properly from the Unicode character set. In particular, applications must use the Unicode character “`” (grave accent, U+0060) only as a spacing accent character.
 
-Unfortunately, one of your applications, GNU Diffutils, regularly uses “`” as a quoting character in diagnostics. For example, the command “diff . -” outputs the diagnostic “diff: cannot compare `-' to a directory”, and this misuse of “`” violates your customer’s requirements. You need to change Diffutils so that it outputs “diff: cannot compare '-' to a directory” instead, using an apostrophe (U+0027) for both opening and closing quote. You don’t want to use fancier quoting characters such as “‘” and “’” (left and right single quotation marks, U+2018 and U+2019) because they are not ASCII characters and another customer requirement is that the programs must work in ASCII-only environments.
+You’re helping to develop an operating system and command set that as part of its acceptance test is supposed to be used by a 
+large government agency. The agency has lots of requirements, some sensible and some persnickety, and one of these requirements 
+is that applications must use characters properly from the Unicode character set. In particular, applications must use the Unicode 
+character “`” (grave accent, U+0060) only as a spacing accent character.
 
-The good news is that the Diffutils maintainers have run into a similar problem, and have a patch called “maint: quote 'like this' or "like this", not `like this'” that does what you want. The bad news is that your customer has specified Diffutils version 3.0, and the patch that you want is not in version 3.0. Also, your customer is conservative and wants a minimal patch so that it’s easy to audit, whereas the Diffutils maintainers’ patch also affects commentary and documentation which your customer doesn’t need or want changed.
+Unfortunately, one of your applications, GNU Diffutils, regularly uses “`” as a quoting character in diagnostics. For example, the
+command “diff . -” outputs the diagnostic “diff: cannot compare `-' to a directory”, and this misuse of “`” violates your customer’s 
+requirements. You need to change Diffutils so that it outputs “diff: cannot compare '-' to a directory” instead, using an apostrophe 
+(U+0027) for both opening and closing quote. You don’t want to use fancier quoting characters such as “‘” and “’” (left and right 
+single quotation marks, U+2018 and U+2019) because they are not ASCII characters and another customer requirement is that the programs 
+must work in ASCII-only environments.
+
+The good news is that the Diffutils maintainers have run into a similar problem, and have a patch called “maint: quote 'like this' or 
+"like this", not `like this'” that does what you want. The bad news is that your customer has specified Diffutils version 3.0, and 
+the patch that you want is not in version 3.0. Also, your customer is conservative and wants a minimal patch so that it’s easy to 
+audit, whereas the Diffutils maintainers’ patch also affects commentary and documentation which your customer doesn’t need or want 
+changed.
+
 
 Laboratory: Managing a backported change
-As usual, keep a log in the file lab9.txt of what you do in the lab so that you can reproduce the results later. This should not merely be a transcript of what you typed: it should be more like a true lab notebook, in which you briefly note down what you did and what happened.
+----------------------------------------
 
-Get a copy of the Diffutils repository, in Git format, from the file ~eggert/src/gnu/diffutils on the SEASnet GNU/Linux servers, or from its main Savannah repository.
+As usual, keep a log in the file lab9.txt of what you do in the lab so that you can reproduce the results later. This should not 
+merely be a transcript of what you typed: it should be more like a true lab notebook, in which you briefly note down what you did 
+and what happened.
+
+Get a copy of the Diffutils repository, in Git format, from the file ~eggert/src/gnu/diffutils on the SEASnet GNU/Linux servers, or 
+from its main Savannah repository.
 Get a log of changes to Diffutils’ master branch using the “git log” command, and put it into the file git-log.txt.
 Generate a list of tags used for Diffutils using the “git tag” command, and put it into the file git-tags.txt
 Find the commit entitled “maint: quote 'like this' or "like this", not `like this'”, and generate a patch for that commit, putting it into the file quote-patch.txt.
