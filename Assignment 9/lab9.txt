@@ -1,0 +1,167 @@
+Adam Cole
+UID: 004912373
+Assn 9
+
+lab9.txt:
+
+
+I first clone the diffutils repository using git
+	$ git clone ~eggert/src/gnu/diffutils
+
+Then we get a log of changes to the master branch by using the command:
+	$ git log > git-log.txt
+And a list of all the tags in the folder too:
+	$ git tag > git-tag.txt
+
+To find the commit entitled "maint quote 'like this' ..."
+	$ emacs git-log.txt
+	C-s "maint: quote"
+And we note it is commit 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f
+
+To create the patch for this commit, we format-patch:
+	$ git format-patch -1 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f --stdout > quote-patch.txt
+
+We check out version 3.0 of diffutils and apply the patch created in the last step
+	$ git checkout v3.0
+	$ patch -p1 < quote-patch.txt
+while patching, I skip the undetermined files and press return.
+
+We use the git status command to get an overview of what happened.
+	$ git status
+
+	# HEAD detached at v3.0
+	# Changes not staged for commit:
+	#   (use "git add <file>..." to update what will be committed)
+	#   (use "git checkout -- <file>..." to discard changes in working directory)
+	#
+	#       modified:   NEWS
+	#       modified:   README
+	#       modified:   TODO
+	#       modified:   doc/diagmeet.note
+	#       modified:   ms/config.bat
+	#       modified:   ms/config.site
+	#       modified:   po/en.po
+	#       modified:   src/analyze.c
+	#       modified:   src/cmp.c
+	#       modified:   src/context.c
+	#       modified:   src/diff.c
+	#       modified:   src/diff.h
+	#       modified:   src/diff3.c
+	#       modified:   src/dir.c
+	#       modified:   src/ifdef.c
+	#       modified:   src/io.c
+	#       modified:   src/sdiff.c
+	#       modified:   src/side.c
+	#       modified:   src/system.h
+	#       modified:   src/util.c
+	#       modified:   tests/help-version
+	...
+
+When you use the vc-diff buffer within a file, it opens the diff file associated
+with that files changes in the latest update.  In this way, you can see all the
+changes made to the modified file.  Navigating to a specific change in the vc-diff
+buffer, if you use diff-apply-hunk, you can revert the changes in that specific
+hunk only.  In this way, you can undo parts of patches but keep other aspects.
+If you use vc-revert while in a modified file, it will undo all of the patch
+changes made to the modified file.
+
+Revert all changes on non-.c files (NEWS, README, TODO, etc.) by using the undo
+command in emacs.
+	$ emacs NEWS
+	C-x v u	(vc-revert)
+	yes
+	C-x C-c
+	$ emacs README
+	...etc.
+
+If we use $ git status command again, these non-.c files no longer appear on the
+list of the modified files.
+
+Now, we go into each of our modified .c files and delete any changes other than
+the changes to character string constants.
+	$ emacs src/analyze.c
+	C-x v = (vc-diff)
+	Navigate to the hunks you wish to undo
+	C-c C-a	(diff-apply-hunk)
+	y
+	C-x C-c
+	$ emacs src/cmp.c
+	...etc.
+
+Now we must manually patch all of the rejected patches stored in any 
+src/*.c.rej files.  In order to do this, we examine the .c.rej files and manually
+emacs into the corresponding .c file, making the changes specified in the .c.rej
+file.  In this case, we change specified backticks ` to a single apostrophe '.
+	$ find . -name "*.c.rej"
+
+		./src/diff.c.rej
+		./src/diff3.c.rej
+
+	$ emacs /src/diff.c
+	C-s `
+	replace correct instances with '
+	C-x C-c
+	$ emacs /src/diff3.c
+	...etc.
+
+We remove all the untracked files returned with $ git status
+	$ git clean -f
+
+And we check that we have modified everything correctly
+	$ git status
+there should be 6 modified .c files and no untracked files.
+	#       modified:   src/cmp.c
+	#       modified:   src/diff.c
+	#       modified:   src/diff3.c
+	#       modified:   src/dir.c
+	#       modified:   src/sdiff.c
+	#       modified:   src/util.c
+
+We store this new patch into a text file.  It should be 300 - 400 lines long.
+	$ git diff > quote-3.0-patch.txt
+	$ wc -l quote-3.0-patch.txt
+which returns 326.
+
+Once we have our new patch created, we follow the instructions from README-hacking.
+	$ ./bootstrap
+	
+Before making, I check the GNU C version running on my server:
+	$ gcc --version
+Which tells me I'm using 4.8.5, which is newer than 2.1.6 as specified in the spec.
+
+Since we are running this on a newer GNU C, we must create an additional patch
+for the 'gets' function.  The patch is given in the spec and I copy it into a
+file called gets-patch.txt and patch the file so make will successfully compile.
+	$ emacs gets-patch.txt
+	$ patch -p0 < gets-patch.txt
+
+Once patched, we can compile and install the new version of diffutils.
+	$ ./configure
+	$ make
+	$ make check
+
+We check to make sure the changes in the patch have worked.
+	$ ./src/diff . -
+	$ ./src/diff --help
+The output messages verify the changes in the patch have been made.
+
+Now we want to compare the differences between your version of diffutils and
+the original.  We reclone the original verison into a folder called diffutils-3.0
+and rename our modified version into diffutils-3.0-patch.
+	$ git clone ~eggert/src/gnu/diffutils diffutils-3.0
+
+Then we run a diff, comparing the two directories, and store it in a text file
+called quote-3.0-test.txt.
+	$ ./diffutils-3.0-patch/src/diff -pru diffutils-3.0 diffutils-3.0-patch > quote-3.0-test.txt
+
+Finally, we check the difference between the contents of quote-3.0-test.txt and quote-3.0-patch.txt.
+	$ diff -u quote-3.0-test.txt quote-3.0-patch.txt > comp.txt
+	$ emacs comp.txt
+
+quote-3.0-patch.txt is the difference in the entire package between diffutils-3.0 and
+diffutils-3.0-patch.  quote-3.0-patch is the patch used to make diffutils-3.0-patch.
+In theory, the diff file between the two should be empty, and the files should be identical.
+
+When we run diff, the resulting file has a lot of differences, but after inspecting the
+differences between the two, almost all of them are differences in comments or file paths.
+

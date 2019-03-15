@@ -1,0 +1,27 @@
+Adam Cole
+UID: 004912373
+Assn 9
+
+gitk-description.txt
+
+
+In the gitk window that pops up after running
+	$ gitk
+in the ~eggert/src/gnu/emacs repository, there are three subwindows that appear.
+
+
+The top subwindow contains an ordered list of all the commits made to the
+master branch of GNU Emacs.  Icons appear next to the commit names to create
+a visualization of an actual branch.  In this subwindow there are three columns.
+First, the name of the commit.  The second column holds the name and email of
+the commiter, and the third column holds the time the commit was made.
+
+The bottom-right subwindow allows you to choose what to view on the bottom-left
+subwindow.  If tree is chosen, the entire emacs repository is displayed, and any
+files you select will appear on the bottom-left subwindow.  The comments for this
+commit will be shown by default.
+
+If patch is chosen, the bottom-left subwindow displays the patch used to update the
+master branch by the committer. The bottom-right window will allow you to navigate
+to the main sections of the patch: the changelog, and the diff headings for each
+file modified in the patch.
