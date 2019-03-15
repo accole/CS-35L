@@ -54,7 +54,7 @@ which records all the changes made to the master branch created in the Lab
 section, and adds a ChangeLog commit message to it.
 
 Now we switch patches with our partners and test them out.  My partner was
-Yuan Cheng, UID: 404931874.
+Yuan Cheng, UID: #########.
 
 We check out another version 3.0 of diffutils in a new branch called 'partner'
 	$ git checkout v3.0 -b partner
