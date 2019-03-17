@@ -1,5 +1,4 @@
 (find ascii)
-
 #!/bin/bash
 
 for i in "$@"
@@ -10,7 +9,6 @@ done
 
 
 (find extra utf header)
-
 #!/bin/bash
 
 for i in "$@"
@@ -27,8 +25,8 @@ do
 done
 
 
-(find missing utf header)
 
+(find missing utf header)
 #!/bin/bash
 
 for i in "$@"
@@ -47,13 +45,9 @@ done
 
 
 (find utf)
-
 #!/bin/bash
 
 for i in "$@"
 do
     grep -r -l -P "[^\x00-\x7F]" $i
 done
-
-
-
