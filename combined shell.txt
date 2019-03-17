@@ -1,0 +1,59 @@
+(find ascii)
+
+#!/bin/bash
+
+for i in "$@"
+do
+    grep -r -L -P "[^\x00-\x7F]" $i
+done
+
+
+
+(find extra utf header)
+
+#!/bin/bash
+
+for i in "$@"
+do
+    SP=`grep -r -L -P "[^\x00-\x7F]" $i`
+    for x in $SP
+    do
+        HEADER=$(head -n 1 $x)
+	UTF="-*- coding: utf-8 -*-"
+	if [ "$HEADER" == "$UTF" ]; then
+	    echo $x
+	fi
+    done
+done
+
+
+(find missing utf header)
+
+#!/bin/bash
+
+for i in "$@"
+do
+    SP=`grep -r -l -P "[^\x00-\x7F]" $i`
+    for x in $SP
+    do
+        HEADER=$(head -n 1 $x)
+	UTF="-*- coding: utf-8 -*-"
+	if [ "$HEADER" != "$UTF" ]; then
+	    echo $x
+	fi
+    done
+done
+
+
+
+(find utf)
+
+#!/bin/bash
+
+for i in "$@"
+do
+    grep -r -l -P "[^\x00-\x7F]" $i
+done
+
+
+
