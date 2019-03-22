@@ -16,7 +16,7 @@ Assignment 4  - C Programming & Debugging -
 
 Assignment 5  - System Call Programming & Debugging -  92/100
 
-Assignment 6  - Multithreaded Performance -  
+Assignment 6  - Multithreaded Performance -  100/100
 
 Assignment 7  - Dynamic Linking -  
 
