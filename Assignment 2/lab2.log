@@ -198,7 +198,7 @@ but not as hawaiian.  Running the command again without the wc tag is:
 	wiki
 
 Again supressing the first two columns, the ouput is only the words similar
-to the hawaiian list of misspelled words that also occur in the enlish
+to the hawaiian list of misspelled words that also occur in the english
 dictionary words:
 	$ tr -cs 'A-Za-z' '[\n*]' < haw.txt | sort -u | comm -12 - words | wc
 Which returns 115, meaning these are the words that are misspelled as
